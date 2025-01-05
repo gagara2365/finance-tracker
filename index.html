@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Tracker</title>
+    <title>Трекер Финансов</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -89,88 +89,115 @@
             width: 20%;
             text-align: center;
         }
+        .balance-display {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Personal Finance Tracker</h1>
+        <h1>Трекер Финансов</h1>
     </header>
     <nav>
         <a href="#" onclick="showPage('tasks')">Финансы</a>
-        <a href="#" onclick="showPage('wishlist')">Вишлист</a>
-        <a href="#" onclick="showPage('mood')">Трекер Настроения</a>
+        <a href="#" onclick="showPage('wishlist')">Список желаний</a>
+        <a href="#" onclick="showPage('mood')">Трекер настроения</a>
     </nav>
     <div class="container">
-        <!-- Tasks Section -->
+        <!-- Раздел Финансов -->
         <section id="tasks" class="page">
-            <h2>Finance Tracker</h2>
-            <div class="form-group">
-                <label for="task-name">Название</label>
-                <input type="text" id="task-name" placeholder="Enter task name">
+            <h2>Финансовый трекер</h2>
+            <div class="balance-display">
+                <p>Общий баланс: <span id="total-balance">0</span> ₽</p>
+                <div class="form-group">
+                    <label for="balance-change">Добавить или изъять деньги</label>
+                    <input type="number" id="balance-change" placeholder="Введите сумму (₽)">
+                </div>
+                <button onclick="updateBalance()">Обновить баланс</button>
             </div>
             <div class="form-group">
-                <label for="task-amount">Сумма траты</label>
-                <input type="number" id="task-amount" placeholder="Enter amount">
+                <label for="task-name">Название задачи</label>
+                <input type="text" id="task-name" placeholder="Введите название задачи">
             </div>
-            <button onclick="addTask()">Add Task</button>
+            <div class="form-group">
+                <label for="task-amount">Необходимая сумма (₽)</label>
+                <input type="number" id="task-amount" placeholder="Введите сумму (₽)">
+            </div>
+            <button onclick="addTask()">Добавить задачу</button>
             <div id="task-list"></div>
         </section>
 
-        <!-- Wishlist Section -->
+        <!-- Раздел Списка Желаний -->
         <section id="wishlist" class="page" style="display: none;">
-            <h2>Wishlist</h2>
+            <h2>Список желаний</h2>
             <div class="form-group">
                 <label for="wish-name">Название</label>
-                <input type="text" id="wish-name" placeholder="Enter item name">
+                <input type="text" id="wish-name" placeholder="Введите название предмета">
             </div>
             <div class="form-group">
-                <label for="wish-desc">Сумма</label>
-                <textarea id="wish-desc" placeholder="Enter description"></textarea>
+                <label for="wish-desc">Описание</label>
+                <textarea id="wish-desc" placeholder="Введите описание"></textarea>
             </div>
             <div class="form-group">
-                <label for="wish-link">Ссылка(не обязательно</label>
-                <input type="url" id="wish-link" placeholder="Enter URL">
+                <label for="wish-link">Ссылка</label>
+                <input type="url" id="wish-link" placeholder="Введите ссылку">
             </div>
-            <button onclick="addWish()">Add to Wishlist</button>
+            <button onclick="addWish()">Добавить в список</button>
             <div id="wishlist-items"></div>
         </section>
 
-        <!-- Mood Tracker Section -->
+        <!-- Раздел Трекера Настроения -->
         <section id="mood" class="page" style="display: none;">
-            <h2>Какое натроение?</h2>
+            <h2>Трекер настроения</h2>
             <div class="form-group mood-scale">
-                <label><input type="radio" name="mood" value="1"> Ужасно</label>
-                <label><input type="radio" name="mood" value="2"> Плохо</label>
-                <label><input type="radio" name="mood" value="3"> Нормально</label>
-                <label><input type="radio" name="mood" value="4"> Хорошо</label>
-                <label><input type="radio" name="mood" value="5"> Отлично</label>
+                <label><input type="radio" name="mood" value="1"> 1</label>
+                <label><input type="radio" name="mood" value="2"> 2</label>
+                <label><input type="radio" name="mood" value="3"> 3</label>
+                <label><input type="radio" name="mood" value="4"> 4</label>
+                <label><input type="radio" name="mood" value="5"> 5</label>
             </div>
             <div class="form-group">
                 <label for="mood-comment">Комментарий</label>
-                <textarea id="mood-comment" placeholder="Add a comment"></textarea>
+                <textarea id="mood-comment" placeholder="Введите комментарий"></textarea>
             </div>
-            <button onclick="addMoodEntry()">Save Mood</button>
+            <button onclick="addMoodEntry()">Сохранить</button>
             <div id="mood-entries"></div>
         </section>
     </div>
 
     <script>
+        let totalBalance = 0;
+
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
         }
 
+        function updateBalance() {
+            const change = parseFloat(document.getElementById('balance-change').value);
+            if (isNaN(change)) return alert('Введите корректную сумму.');
+            totalBalance += change;
+            document.getElementById('total-balance').textContent = totalBalance.toFixed(2);
+            document.getElementById('balance-change').value = '';
+        }
+
         function addTask() {
             const name = document.getElementById('task-name').value;
             const amount = parseFloat(document.getElementById('task-amount').value);
-            if (!name || isNaN(amount) || amount <= 0) return alert('Please enter valid task details.');
+            if (!name || isNaN(amount) || amount <= 0) return alert('Введите корректные данные задачи.');
 
             const taskList = document.getElementById('task-list');
             const task = document.createElement('div');
             task.className = 'task';
             task.innerHTML = `
                 <h3>${name}</h3>
-                <p>Amount: $${amount.toFixed(2)}</p>
+                <p>Необходимая сумма: ${amount.toFixed(2)} ₽</p>
                 <div class="progress-bar">
                     <div class="progress"></div>
                 </div>
@@ -182,33 +209,36 @@
             const name = document.getElementById('wish-name').value;
             const desc = document.getElementById('wish-desc').value;
             const link = document.getElementById('wish-link').value;
-            if (!name || !link) return alert('Please enter valid wishlist details.');
+            if (!name || !link) return alert('Введите корректные данные для списка желаний.');
 
             const wishList = document.getElementById('wishlist-items');
-            const item = document.createElement('div');
-            item.className = 'wishlist-item';
-            item.innerHTML = `
+            const wish = document.createElement('div');
+            wish.className = 'wishlist-item';
+            wish.innerHTML = `
                 <h3>${name}</h3>
                 <p>${desc}</p>
-                <a href="${link}" target="_blank">View Item</a>
+                <a href="${link}" target="_blank">Перейти по ссылке</a>
             `;
-            wishList.appendChild(item);
+            wishList.appendChild(wish);
         }
 
         function addMoodEntry() {
             const mood = document.querySelector('input[name="mood"]:checked');
             const comment = document.getElementById('mood-comment').value;
-            if (!mood) return alert('Please select a mood.');
+            if (!mood) return alert('Выберите настроение.');
 
-            const moodEntries = document.getElementById('mood-entries');
+            const moodList = document.getElementById('mood-entries');
             const entry = document.createElement('div');
             entry.className = 'mood-entry';
             entry.innerHTML = `
-                <p>Mood: ${mood.value}/5</p>
-                <p>${comment}</p>
+                <p>Настроение: ${mood.value}</p>
+                <p>Комментарий: ${comment}</p>
             `;
-            moodEntries.appendChild(entry);
+            moodList.appendChild(entry);
+
+            document.getElementById('mood-comment').value = '';
         }
     </script>
 </body>
 </html>
+
