@@ -11,13 +11,13 @@
         <h1>Трекер Финансов</h1>
     </header>
     <nav>
-        <a href="#" data-page="tasks">Финансы</a>
-        <a href="#" data-page="wishlist">Желаемое</a>
-        <a href="#" data-page="mood">Настроение</a>
+        <a href="#" class="tab-link active" onclick="switchTab(event, 'tasks')">Финансы</a>
+        <a href="#" class="tab-link" onclick="switchTab(event, 'wishlist')">Желания</a>
+        <a href="#" class="tab-link" onclick="switchTab(event, 'mood')">Настроение</a>
     </nav>
     <div class="container">
-        <!-- Секция задач -->
-        <section id="tasks" class="page">
+        <!-- Секция Финансы -->
+        <section id="tasks" class="tab-content active">
             <h2>Финансовый Трекер</h2>
             <div class="balance-display">
                 <p>Всего накоплено: <span id="total-balance">0</span> ₽</p>
@@ -25,7 +25,7 @@
                     <label for="balance-change">Добавить или убрать средства</label>
                     <input type="number" id="balance-change" placeholder="Введите сумму (₽)">
                 </div>
-                <button id="update-balance-btn">Обновить баланс</button>
+                <button onclick="updateBalance()">Обновить баланс</button>
             </div>
             <div class="form-group">
                 <label for="task-name">Название задачи</label>
@@ -35,14 +35,14 @@
                 <label for="task-amount">Необходимая сумма (₽)</label>
                 <input type="number" id="task-amount" placeholder="Введите сумму (₽)">
             </div>
-            <button id="add-task-btn">Добавить задачу</button>
+            <button onclick="addTask()">Добавить задачу</button>
             <div id="task-list"></div>
             <h3>История удаленных задач</h3>
             <div id="deleted-tasks"></div>
         </section>
 
-        <!-- Секция желаемого -->
-        <section id="wishlist" class="page hidden">
+        <!-- Секция Желания -->
+        <section id="wishlist" class="tab-content">
             <h2>Желаемое</h2>
             <div class="form-group">
                 <label for="wish-name">Название</label>
@@ -56,12 +56,12 @@
                 <label for="wish-link">Ссылка</label>
                 <input type="url" id="wish-link" placeholder="Введите URL">
             </div>
-            <button id="add-wish-btn">Добавить в желаемое</button>
+            <button onclick="addWish()">Добавить в желаемое</button>
             <div id="wishlist-items"></div>
         </section>
 
-        <!-- Секция настроения -->
-        <section id="mood" class="page hidden">
+        <!-- Секция Настроение -->
+        <section id="mood" class="tab-content">
             <h2>Трекер Настроения</h2>
             <div class="form-group mood-scale">
                 <label><input type="radio" name="mood" value="1"> Ужасно</label>
@@ -74,11 +74,10 @@
                 <label for="mood-comment">Комментарий</label>
                 <textarea id="mood-comment" placeholder="Добавьте комментарий"></textarea>
             </div>
-            <button id="add-mood-btn">Сохранить настроение</button>
+            <button onclick="addMoodEntry()">Сохранить настроение</button>
             <div id="mood-entries"></div>
         </section>
     </div>
     <script src="scripts.js"></script>
 </body>
 </html>
-
