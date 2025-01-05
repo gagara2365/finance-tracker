@@ -96,20 +96,20 @@
         <h1>Personal Finance Tracker</h1>
     </header>
     <nav>
-        <a href="#" onclick="showPage('tasks')">Finance</a>
-        <a href="#" onclick="showPage('wishlist')">Wishlist</a>
-        <a href="#" onclick="showPage('mood')">Mood Tracker</a>
+        <a href="#" onclick="showPage('tasks')">Финансы</a>
+        <a href="#" onclick="showPage('wishlist')">Вишлист</a>
+        <a href="#" onclick="showPage('mood')">Трекер Настроения</a>
     </nav>
     <div class="container">
         <!-- Tasks Section -->
         <section id="tasks" class="page">
             <h2>Finance Tracker</h2>
             <div class="form-group">
-                <label for="task-name">Task Name</label>
+                <label for="task-name">Название</label>
                 <input type="text" id="task-name" placeholder="Enter task name">
             </div>
             <div class="form-group">
-                <label for="task-amount">Amount Needed</label>
+                <label for="task-amount">Сумма траты</label>
                 <input type="number" id="task-amount" placeholder="Enter amount">
             </div>
             <button onclick="addTask()">Add Task</button>
@@ -120,15 +120,15 @@
         <section id="wishlist" class="page" style="display: none;">
             <h2>Wishlist</h2>
             <div class="form-group">
-                <label for="wish-name">Item Name</label>
+                <label for="wish-name">Название</label>
                 <input type="text" id="wish-name" placeholder="Enter item name">
             </div>
             <div class="form-group">
-                <label for="wish-desc">Description</label>
+                <label for="wish-desc">Сумма</label>
                 <textarea id="wish-desc" placeholder="Enter description"></textarea>
             </div>
             <div class="form-group">
-                <label for="wish-link">Link</label>
+                <label for="wish-link">Ссылка(не обязательно</label>
                 <input type="url" id="wish-link" placeholder="Enter URL">
             </div>
             <button onclick="addWish()">Add to Wishlist</button>
@@ -137,16 +137,16 @@
 
         <!-- Mood Tracker Section -->
         <section id="mood" class="page" style="display: none;">
-            <h2>Mood Tracker</h2>
+            <h2>Какое натроение?</h2>
             <div class="form-group mood-scale">
-                <label><input type="radio" name="mood" value="1"> 1</label>
-                <label><input type="radio" name="mood" value="2"> 2</label>
-                <label><input type="radio" name="mood" value="3"> 3</label>
-                <label><input type="radio" name="mood" value="4"> 4</label>
-                <label><input type="radio" name="mood" value="5"> 5</label>
+                <label><input type="radio" name="mood" value="1"> Ужасно</label>
+                <label><input type="radio" name="mood" value="2"> Плохо</label>
+                <label><input type="radio" name="mood" value="3"> Нормально</label>
+                <label><input type="radio" name="mood" value="4"> Хорошо</label>
+                <label><input type="radio" name="mood" value="5"> Отлично</label>
             </div>
             <div class="form-group">
-                <label for="mood-comment">Comment</label>
+                <label for="mood-comment">Комментарий</label>
                 <textarea id="mood-comment" placeholder="Add a comment"></textarea>
             </div>
             <button onclick="addMoodEntry()">Save Mood</button>
