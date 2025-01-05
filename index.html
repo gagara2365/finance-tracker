@@ -41,7 +41,7 @@
             max-width: 800px;
             margin: auto;
         }
-        .task, .wishlist-item, .mood-entry {
+        .task, .wishlist-item, .mood-entry, .deleted-task {
             background: white;
             padding: 1rem;
             margin-bottom: 1rem;
@@ -106,17 +106,17 @@
     </header>
     <nav>
         <a href="#" onclick="showPage('tasks')">Финансы</a>
-        <a href="#" onclick="showPage('wishlist')">Список желаний</a>
-        <a href="#" onclick="showPage('mood')">Трекер настроения</a>
+        <a href="#" onclick="showPage('wishlist')">Желаемое</a>
+        <a href="#" onclick="showPage('mood')">Настроение</a>
     </nav>
     <div class="container">
-        <!-- Раздел Финансов -->
+        <!-- Секция задач -->
         <section id="tasks" class="page">
-            <h2>Финансовый трекер</h2>
+            <h2>Финансовый Трекер</h2>
             <div class="balance-display">
-                <p>Общий баланс: <span id="total-balance">0</span> ₽</p>
+                <p>Всего накоплено: <span id="total-balance">0</span> ₽</p>
                 <div class="form-group">
-                    <label for="balance-change">Добавить или изъять деньги</label>
+                    <label for="balance-change">Добавить или убрать средства</label>
                     <input type="number" id="balance-change" placeholder="Введите сумму (₽)">
                 </div>
                 <button onclick="updateBalance()">Обновить баланс</button>
@@ -131,14 +131,16 @@
             </div>
             <button onclick="addTask()">Добавить задачу</button>
             <div id="task-list"></div>
+            <h3>История удаленных задач</h3>
+            <div id="deleted-tasks"></div>
         </section>
 
-        <!-- Раздел Списка Желаний -->
+        <!-- Секция желаемого -->
         <section id="wishlist" class="page" style="display: none;">
-            <h2>Список желаний</h2>
+            <h2>Желаемое</h2>
             <div class="form-group">
                 <label for="wish-name">Название</label>
-                <input type="text" id="wish-name" placeholder="Введите название предмета">
+                <input type="text" id="wish-name" placeholder="Введите название">
             </div>
             <div class="form-group">
                 <label for="wish-desc">Описание</label>
@@ -146,33 +148,39 @@
             </div>
             <div class="form-group">
                 <label for="wish-link">Ссылка</label>
-                <input type="url" id="wish-link" placeholder="Введите ссылку">
+                <input type="url" id="wish-link" placeholder="Введите URL">
             </div>
-            <button onclick="addWish()">Добавить в список</button>
+            <button onclick="addWish()">Добавить в желаемое</button>
             <div id="wishlist-items"></div>
         </section>
 
-        <!-- Раздел Трекера Настроения -->
+        <!-- Секция настроения -->
         <section id="mood" class="page" style="display: none;">
-            <h2>Трекер настроения</h2>
+            <h2>Трекер Настроения</h2>
             <div class="form-group mood-scale">
-                <label><input type="radio" name="mood" value="1"> 1</label>
-                <label><input type="radio" name="mood" value="2"> 2</label>
-                <label><input type="radio" name="mood" value="3"> 3</label>
-                <label><input type="radio" name="mood" value="4"> 4</label>
-                <label><input type="radio" name="mood" value="5"> 5</label>
+                <label><input type="radio" name="mood" value="1"> Ужасно</label>
+                <label><input type="radio" name="mood" value="2"> Плохо</label>
+                <label><input type="radio" name="mood" value="3"> Нормально</label>
+                <label><input type="radio" name="mood" value="4"> Хорошо</label>
+                <label><input type="radio" name="mood" value="5"> Отлично</label>
             </div>
             <div class="form-group">
                 <label for="mood-comment">Комментарий</label>
-                <textarea id="mood-comment" placeholder="Введите комментарий"></textarea>
+                <textarea id="mood-comment" placeholder="Добавьте комментарий"></textarea>
             </div>
-            <button onclick="addMoodEntry()">Сохранить</button>
+            <button onclick="addMoodEntry()">Сохранить настроение</button>
             <div id="mood-entries"></div>
         </section>
     </div>
 
     <script>
-        let totalBalance = 0;
+        let totalBalance = parseFloat(localStorage.getItem('totalBalance')) || 0;
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let deletedTasks = JSON.parse(localStorage.getItem('deletedTasks')) || [];
+
+        document.getElementById('total-balance').textContent = totalBalance.toFixed(2);
+        renderTasks();
+        renderDeletedTasks();
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
@@ -183,6 +191,7 @@
             const change = parseFloat(document.getElementById('balance-change').value);
             if (isNaN(change)) return alert('Введите корректную сумму.');
             totalBalance += change;
+            localStorage.setItem('totalBalance', totalBalance);
             document.getElementById('total-balance').textContent = totalBalance.toFixed(2);
             document.getElementById('balance-change').value = '';
         }
@@ -190,53 +199,53 @@
         function addTask() {
             const name = document.getElementById('task-name').value;
             const amount = parseFloat(document.getElementById('task-amount').value);
-            if (!name || isNaN(amount) || amount <= 0) return alert('Введите корректные данные задачи.');
+            if (!name || isNaN(amount) || amount <= 0) return alert('Введите корректные данные для задачи.');
 
+            const task = { name, amount };
+            tasks.push(task);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+
+            document.getElementById('task-name').value = '';
+            document.getElementById('task-amount').value = '';
+        }
+
+        function renderTasks() {
             const taskList = document.getElementById('task-list');
-            const task = document.createElement('div');
-            task.className = 'task';
-            task.innerHTML = `
-                <h3>${name}</h3>
-                <p>Необходимая сумма: ${amount.toFixed(2)} ₽</p>
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-            `;
-            taskList.appendChild(task);
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+                taskDiv.innerHTML = `
+                    <h3>${task.name}</h3>
+                    <p>Сумма: ${task.amount.toFixed(2)} ₽</p>
+                    <button onclick="deleteTask(${index})">Удалить</button>
+                `;
+                taskList.appendChild(taskDiv);
+            });
         }
 
-        function addWish() {
-            const name = document.getElementById('wish-name').value;
-            const desc = document.getElementById('wish-desc').value;
-            const link = document.getElementById('wish-link').value;
-            if (!name || !link) return alert('Введите корректные данные для списка желаний.');
-
-            const wishList = document.getElementById('wishlist-items');
-            const wish = document.createElement('div');
-            wish.className = 'wishlist-item';
-            wish.innerHTML = `
-                <h3>${name}</h3>
-                <p>${desc}</p>
-                <a href="${link}" target="_blank">Перейти по ссылке</a>
-            `;
-            wishList.appendChild(wish);
+        function deleteTask(index) {
+            const removedTask = tasks.splice(index, 1)[0];
+            deletedTasks.push(removedTask);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('deletedTasks', JSON.stringify(deletedTasks));
+            renderTasks();
+            renderDeletedTasks();
         }
 
-        function addMoodEntry() {
-            const mood = document.querySelector('input[name="mood"]:checked');
-            const comment = document.getElementById('mood-comment').value;
-            if (!mood) return alert('Выберите настроение.');
-
-            const moodList = document.getElementById('mood-entries');
-            const entry = document.createElement('div');
-            entry.className = 'mood-entry';
-            entry.innerHTML = `
-                <p>Настроение: ${mood.value}</p>
-                <p>Комментарий: ${comment}</p>
-            `;
-            moodList.appendChild(entry);
-
-            document.getElementById('mood-comment').value = '';
+        function renderDeletedTasks() {
+            const deletedTaskList = document.getElementById('deleted-tasks');
+            deletedTaskList.innerHTML = '';
+            deletedTasks.forEach(task => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'deleted-task';
+                taskDiv.innerHTML = `
+                    <h4>${task.name}</h4>
+                    <p>Сумма: ${task.amount.toFixed(2)} ₽</p>
+                `;
+                deletedTaskList.appendChild(taskDiv);
+            });
         }
     </script>
 </body>
