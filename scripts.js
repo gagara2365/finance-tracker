@@ -1,12 +1,19 @@
-// Переключение вкладок
-function switchTab(event, tabId) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
-}
+document.querySelectorAll('.tab-link').forEach(link => {
+    link.addEventListener('click', event => {
+        event.preventDefault();
 
-// Финансы
+        // Удалить активный класс со всех вкладок и секций
+        document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(section => section.classList.remove('active'));
+
+        // Добавить активный класс к текущей вкладке и соответствующей секции
+        const tabId = link.getAttribute('data-tab');
+        link.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    });
+});
+
+// Финансовый трекер
 let totalBalance = 0;
 function updateBalance() {
     const change = parseFloat(document.getElementById("balance-change").value) || 0;
