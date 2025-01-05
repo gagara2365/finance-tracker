@@ -1,19 +1,17 @@
+/* Основные стили */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     background-color: #f4f4f9;
     color: #333;
 }
-
 header {
     background-color: #4caf50;
     color: white;
     padding: 1rem;
     text-align: center;
 }
-
 nav {
     display: flex;
     justify-content: center;
@@ -21,7 +19,6 @@ nav {
     background-color: #333;
     padding: 0.5rem 0;
 }
-
 nav a {
     color: white;
     text-decoration: none;
@@ -29,29 +26,41 @@ nav a {
     border-radius: 5px;
     transition: background-color 0.3s;
 }
-
-nav a:hover {
+nav a:hover, nav a.active {
     background-color: #575757;
 }
-
 .container {
     padding: 1rem;
     max-width: 800px;
     margin: auto;
 }
-
-.hidden {
+.tab-content {
     display: none;
 }
-
-.page {
+.tab-content.active {
     display: block;
 }
-
-.task, .wishlist-item, .mood-entry, .deleted-task {
+/* Общие элементы */
+.balance-display, .form-group, .task, .wishlist-item, .mood-entry {
     background: white;
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+input, textarea, button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
 }
