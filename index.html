@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -158,11 +159,11 @@
         <section id="mood" class="page" style="display: none;">
             <h2>Трекер Настроения</h2>
             <div class="form-group mood-scale">
-                <label><input type="radio" name="mood" value="Ужасно"> Ужасно</label>
-                <label><input type="radio" name="mood" value="Плохо"> Плохо</label>
-                <label><input type="radio" name="mood" value="Нормально"> Нормально</label>
-                <label><input type="radio" name="mood" value="Хорошо"> Хорошо</label>
-                <label><input type="radio" name="mood" value="Отлично"> Отлично</label>
+                <label><input type="radio" name="mood" value="1"> Ужасно</label>
+                <label><input type="radio" name="mood" value="2"> Плохо</label>
+                <label><input type="radio" name="mood" value="3"> Нормально</label>
+                <label><input type="radio" name="mood" value="4"> Хорошо</label>
+                <label><input type="radio" name="mood" value="5"> Отлично</label>
             </div>
             <div class="form-group">
                 <label for="mood-comment">Комментарий</label>
@@ -172,109 +173,9 @@
             <div id="mood-entries"></div>
         </section>
     </div>
+<script>
+    // Вставить JavaScript код сюда из редактора
 
-    <script>
-        let totalBalance = parseFloat(localStorage.getItem('totalBalance')) || 0;
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        let deletedTasks = JSON.parse(localStorage.getItem('deletedTasks')) || [];
-        let moodEntries = JSON.parse(localStorage.getItem('moodEntries')) || [];
-
-        document.getElementById('total-balance').textContent = totalBalance.toFixed(2);
-        renderTasks();
-        renderDeletedTasks();
-        renderMoodEntries();
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
-            document.getElementById(pageId).style.display = 'block';
-        }
-
-        function updateBalance() {
-            const change = parseFloat(document.getElementById('balance-change').value);
-            if (isNaN(change)) return alert('Введите корректную сумму.');
-            totalBalance += change;
-            localStorage.setItem('totalBalance', totalBalance);
-            document.getElementById('total-balance').textContent = totalBalance.toFixed(2);
-            document.getElementById('balance-change').value = '';
-            renderTasks();
-        }
-
-        function addTask() {
-            const name = document.getElementById('task-name').value;
-            const amount = parseFloat(document.getElementById('task-amount').value);
-            if (!name || isNaN(amount) || amount <= 0) return alert('Введите корректные данные для задачи.');
-
-            const task = { name, amount, progress: 0 };
-            tasks.push(task);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            renderTasks();
-
-            document.getElementById('task-name').value = '';
-            document.getElementById('task-amount').value = '';
-        }
-
-        function renderTasks() {
-            const taskList = document.getElementById('task-list');
-            taskList.innerHTML = '';
-            tasks.forEach((task, index) => {
-                const taskDiv = document.createElement('div');
-                taskDiv.className = 'task';
-                const progressPercentage = Math.min((totalBalance / task.amount) * 100, 100);
-                taskDiv.innerHTML = `
-                    <h3>${task.name}</h3>
-                    <p>Сумма: ${task.amount.toFixed(2)} ₽</p>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: ${progressPercentage}%;"></div>
-                    </div>
-                    <button onclick="deleteTask(${index})">Удалить</button>
-                `;
-                taskList.appendChild(taskDiv);
-            });
-        }
-
-        function deleteTask(index) {
-            const removedTask = tasks.splice(index, 1)[0];
-            deletedTasks.push(removedTask);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            localStorage.setItem('deletedTasks', JSON.stringify(deletedTasks));
-            renderTasks();
-            renderDeletedTasks();
-        }
-
-        function renderDeletedTasks() {
-            const deletedTaskList = document.getElementById('deleted-tasks');
-            deletedTaskList.innerHTML = '';
-            deletedTasks.forEach(task => {
-                const taskDiv = document.createElement('div');
-                taskDiv.className = 'deleted-task';
-                taskDiv.innerHTML = `
-                    <h4>${task.name}</h4>
-                    <p>Сумма: ${task.amount.toFixed(2)} ₽</p>
-                `;
-                deletedTaskList.appendChild(taskDiv);
-            });
-        }
-
-        function addMoodEntry() {
-            const mood = document.querySelector('input[name="mood"]:checked');
-            const comment = document.getElementById('mood-comment').value;
-            if (!mood) return alert('Выберите настроение.');
-
-            const moodEntry = { mood: mood.value, comment, date: new Date().toLocaleDateString() };
-            moodEntries.push(moodEntry);
-            localStorage.setItem('moodEntries', JSON.stringify(moodEntries));
-            renderMoodEntries();
-
-            document.getElementById('mood-comment').value = '';
-        }
-
-        function renderMoodEntries() {
-            const moodEntriesDiv = document.getElementById('mood-entries');
-            moodEntriesDiv.innerHTML = '';
-            moodEntries.forEach(entry => {
-                const moodDiv = document.createElement('div');
-                moodDiv.className = 'mood-entry';
-                moodDiv.innerHTML = `
-                    <p>Дата: ${entry.date}</p>
-                    <p>Настро
-
+</script>
+</body>
+</html>
