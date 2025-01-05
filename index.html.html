@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4caf50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            background-color: #333;
+            padding: 0.5rem 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            padding: 1rem;
+            max-width: 800px;
+            margin: auto;
+        }
+        .task, .wishlist-item, .mood-entry {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+            margin-top: 0.5rem;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .mood-scale label {
+            display: inline-block;
+            width: 20%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Personal Finance Tracker</h1>
+    </header>
+    <nav>
+        <a href="#" onclick="showPage('tasks')">Finance</a>
+        <a href="#" onclick="showPage('wishlist')">Wishlist</a>
+        <a href="#" onclick="showPage('mood')">Mood Tracker</a>
+    </nav>
+    <div class="container">
+        <!-- Tasks Section -->
+        <section id="tasks" class="page">
+            <h2>Finance Tracker</h2>
+            <div class="form-group">
+                <label for="task-name">Task Name</label>
+                <input type="text" id="task-name" placeholder="Enter task name">
+            </div>
+            <div class="form-group">
+                <label for="task-amount">Amount Needed</label>
+                <input type="number" id="task-amount" placeholder="Enter amount">
+            </div>
+            <button onclick="addTask()">Add Task</button>
+            <div id="task-list"></div>
+        </section>
+
+        <!-- Wishlist Section -->
+        <section id="wishlist" class="page" style="display: none;">
+            <h2>Wishlist</h2>
+            <div class="form-group">
+                <label for="wish-name">Item Name</label>
+                <input type="text" id="wish-name" placeholder="Enter item name">
+            </div>
+            <div class="form-group">
+                <label for="wish-desc">Description</label>
+                <textarea id="wish-desc" placeholder="Enter description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="wish-link">Link</label>
+                <input type="url" id="wish-link" placeholder="Enter URL">
+            </div>
+            <button onclick="addWish()">Add to Wishlist</button>
+            <div id="wishlist-items"></div>
+        </section>
+
+        <!-- Mood Tracker Section -->
+        <section id="mood" class="page" style="display: none;">
+            <h2>Mood Tracker</h2>
+            <div class="form-group mood-scale">
+                <label><input type="radio" name="mood" value="1"> 1</label>
+                <label><input type="radio" name="mood" value="2"> 2</label>
+                <label><input type="radio" name="mood" value="3"> 3</label>
+                <label><input type="radio" name="mood" value="4"> 4</label>
+                <label><input type="radio" name="mood" value="5"> 5</label>
+            </div>
+            <div class="form-group">
+                <label for="mood-comment">Comment</label>
+                <textarea id="mood-comment" placeholder="Add a comment"></textarea>
+            </div>
+            <button onclick="addMoodEntry()">Save Mood</button>
+            <div id="mood-entries"></div>
+        </section>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function addTask() {
+            const name = document.getElementById('task-name').value;
+            const amount = parseFloat(document.getElementById('task-amount').value);
+            if (!name || isNaN(amount) || amount <= 0) return alert('Please enter valid task details.');
+
+            const taskList = document.getElementById('task-list');
+            const task = document.createElement('div');
+            task.className = 'task';
+            task.innerHTML = `
+                <h3>${name}</h3>
+                <p>Amount: $${amount.toFixed(2)}</p>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+            `;
+            taskList.appendChild(task);
+        }
+
+        function addWish() {
+            const name = document.getElementById('wish-name').value;
+            const desc = document.getElementById('wish-desc').value;
+            const link = document.getElementById('wish-link').value;
+            if (!name || !link) return alert('Please enter valid wishlist details.');
+
+            const wishList = document.getElementById('wishlist-items');
+            const item = document.createElement('div');
+            item.className = 'wishlist-item';
+            item.innerHTML = `
+                <h3>${name}</h3>
+                <p>${desc}</p>
+                <a href="${link}" target="_blank">View Item</a>
+            `;
+            wishList.appendChild(item);
+        }
+
+        function addMoodEntry() {
+            const mood = document.querySelector('input[name="mood"]:checked');
+            const comment = document.getElementById('mood-comment').value;
+            if (!mood) return alert('Please select a mood.');
+
+            const moodEntries = document.getElementById('mood-entries');
+            const entry = document.createElement('div');
+            entry.className = 'mood-entry';
+            entry.innerHTML = `
+                <p>Mood: ${mood.value}/5</p>
+                <p>${comment}</p>
+            `;
+            moodEntries.appendChild(entry);
+        }
+    </script>
+</body>
+</html>
