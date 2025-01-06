@@ -12,23 +12,32 @@ header {
     text-align: center;
 }
 
-nav button {
-    padding: 10px;
-    margin-right: 5px;
-    cursor: pointer;
-    background-color: #ddd;
-    border: none;
-    outline: none;
+.mood-form {
+    margin-top: 20px;
 }
 
-nav button:hover {
-    background-color: #ccc;
+.mood-form label {
+    margin-right: 10px;
 }
 
-.section {
-    display: none;
-}
-
-.active {
+.mood-form textarea {
     display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#mood-entries {
+    margin-top: 20px;
 }
