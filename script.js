@@ -18,11 +18,9 @@ function setupTabs() {
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      // Убираем активность со всех вкладок
       tabs.forEach(t => t.classList.remove('active'));
       tabContents.forEach(content => content.classList.remove('active'));
 
-      // Активируем текущую вкладку и её содержимое
       tab.classList.add('active');
       document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
     });
@@ -94,9 +92,12 @@ function updateUI() {
   // Обновляем настроения
   const moodLog = document.getElementById('mood-log');
   moodLog.innerHTML = '';
-  moodLogData.forEach(log => {
+  moodLogData.forEach((log, index) => {
     const entry = document.createElement('div');
-    entry.innerHTML = `<p>${log.date}: ${log.mood} - ${log.comment}</p>`;
+    entry.innerHTML = `
+      <p>${log.date}: ${log.mood} - ${log.comment}</p>
+      <button onclick="deleteMood(${index})">Удалить</button>
+    `;
     moodLog.appendChild(entry);
   });
 }
@@ -161,18 +162,14 @@ function updateSavings() {
   savedAmount += amount;
   transactionHistory.push({ type: 'Внесено', amount, date: new Date().toLocaleString() });
 
+  // Равномерное распределение суммы по всем пунктам
+  let remainingAmount = amount;
   wishListData.forEach(wish => {
-    if (wish.saved < wish.price) {
-      const remaining = wish.price - wish.saved;
-      if (amount >= remaining) {
-        wish.saved = wish.price;
-        wish.progress = 100;
-        amount -= remaining;
-      } else {
-        wish.saved += amount;
-        wish.progress = (wish.saved / wish.price) * 100;
-        amount = 0;
-      }
+    if (remainingAmount > 0 && wish.saved < wish.price) {
+      const amountToAdd = Math.min(remainingAmount, wish.price - wish.saved);
+      wish.saved += amountToAdd;
+      wish.progress = (wish.saved / wish.price) * 100;
+      remainingAmount -= amountToAdd;
     }
   });
 
@@ -198,6 +195,13 @@ function markWishAsDone(index) {
   totalWishSum -= wish.price;
   wishListData.splice(index, 1);
   transactionHistory.push({ type: 'Выполнено', amount: wish.saved, date: new Date().toLocaleString() });
+  saveData();
+  updateUI();
+}
+
+// Удалить настроение
+function deleteMood(index) {
+  moodLogData.splice(index, 1);
   saveData();
   updateUI();
 }
