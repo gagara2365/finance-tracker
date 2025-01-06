@@ -1,6 +1,19 @@
 let totalWishSum = 0;
 let savedAmount = 0;
 
+// Функция для переключения вкладок
+function showTab(tabId) {
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => {
+    tab.style.display = 'none';
+    tab.classList.remove('active');
+  });
+  const activeTab = document.getElementById(tabId);
+  activeTab.style.display = 'block';
+  activeTab.classList.add('active');
+}
+
+// Добавить пункт в список желаний
 function addWish(event) {
   event.preventDefault();
   const name = document.getElementById('wish-name').value;
@@ -27,6 +40,7 @@ function addWish(event) {
   wishList.appendChild(wishItem);
 }
 
+// Обновить сумму накоплений
 function updateSavings() {
   const amount = parseFloat(document.getElementById('input-amount').value);
   if (isNaN(amount) || amount <= 0) return;
@@ -38,6 +52,7 @@ function updateSavings() {
   document.getElementById('total-progress').style.width = progress + '%';
 }
 
+// Добавить настроение
 function addMood() {
   const mood = document.getElementById('mood-select').value;
   const comment = document.getElementById('mood-comment').value;
