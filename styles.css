@@ -19,11 +19,11 @@ nav button {
 }
 
 .section {
-    display: none; /* Hide all sections initially */
+    display: none;
 }
 
-.section.active {
-    display: block; /* Show the active section */
+.active {
+    display: block;
 }
 
 .progress-bar-container {
