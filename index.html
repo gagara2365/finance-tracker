@@ -1,48 +1,60 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Трекер Финансов</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Трекер Финансов</h1>
-    </header>
-    <nav>
-        <a href="#" class="tab-link active" data-tab="tasks">Финансы</a>
-        <a href="#" class="tab-link" data-tab="wishlist">Желания</a>
-        <a href="#" class="tab-link" data-tab="mood">Настроение</a>
-    </nav>
-    <div class="container">
-        <section id="tasks" class="tab-content active">
-            <h2>Финансовый Трекер</h2>
-            <div class="progress">
-                <div class="progress-bar" id="current-progress" style="width: 0%">0%</div>
-            </div>
-            <div class="progress">
-                <div class="progress-bar" id="goal-progress" style="width: 0%">0%</div>
-            </div>
-        </section>
-        <section id="wishlist" class="tab-content hidden">
-            <h2>Желаемое</h2>
-            <input type="text" id="wish-name" placeholder="Название">
-            <textarea id="wish-desc" placeholder="Описание"></textarea>
-            <input type="text" id="wish-link" placeholder="Ссылка">
-            <input type="number" id="wish-amount" placeholder="Сумма"> <!-- Поле для суммы -->
-            <button id="add-wish-btn">Добавить</button>
-        </section>
-        <section id="mood" class="tab-content hidden">
-            <h2>Трекер Настроения</h2>
-            <input type="radio" name="mood" value="Отличное"> Отличное
-            <input type="radio" name="mood" value="Хорошее"> Хорошее
-            <input type="radio" name="mood" value="Нормальное"> Нормальное
-            <input type="radio" name="mood" value="Плохое"> Плохое
-            <textarea id="mood-comment" placeholder="Комментарий"></textarea>
-            <button id="add-mood-btn">Добавить</button>
-        </section>
-    </div>
-    <script src="scripts.js"></script>
-</body>
-</html>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+main {
+    margin-top: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+input[type="number"], input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.progress-bar-container {
+    margin-top: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.progress {
+    height: 20px;
+    background-color: #007BFF;
+    width: 0%;
+    color: white;
+    text-align: center;
+}
