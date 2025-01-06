@@ -11,40 +11,18 @@
         <h1>Мой Трекер</h1>
     </header>
     <nav>
-        <button data-section="finance">Финансовый трекер</button>
-        <button data-section="wishlist">Список желаний</button>
-        <button data-section="mood">Трекер настроения</button>
+        <button onclick="showSection('finance')">Финансовый трекер</button>
+        <button onclick="showSection('wishlist')">Список желаний</button>
+        <button onclick="showSection('mood')">Трекер настроения</button>
     </nav>
     <div id="finance" class="section">
-        <h2>Финансовый трекер</h2>
-        <div class="progress-bar-container">
-            <div>Шкала желаний:</div>
-            <div class="progress-bar"><div class="progress"></div></div>
-            <div>Шкала накоплений:</div>
-            <div class="progress-bar"><div class="progress"></div></div>
-        </div>
-        <input type="number" id="amount-input" placeholder="Введите сумму...">
-        <button onclick="updateSavings()">Добавить сумму</button>
+        <!-- Контент Финансового трекера -->
     </div>
     <div id="wishlist" class="section hidden">
-        <h2>Список желаний</h2>
-        <input type="text" id="wish-title" placeholder="Название">
-        <textarea id="wish-description" placeholder="Описание"></textarea>
-        <input type="number" id="wish-amount" placeholder="Сумма">
-        <input type="text" id="wish-link" placeholder="Ссылка">
-        <button onclick="addWish()">Добавить желание</button>
-        <div id="wish-list"></div>
+        <!-- Контент Списка желаний -->
     </div>
     <div id="mood" class="section hidden">
-        <h2>Трекер настроения</h2>
-        <label><input type="radio" name="mood" value="Ужасно"> Ужасно</label>
-        <label><input type="radio" name="mood" value="Плохо"> Плохо</label>
-        <label><input type="radio" name="mood" value="Нормально"> Нормально</label>
-        <label><input type="radio" name="mood" value="Хорошо"> Хорошо</label>
-        <label><input type="radio" name="mood" value="Отлично"> Отлично</label>
-        <textarea id="mood-comment" placeholder="Комментарий"></textarea>
-        <button onclick="addMoodEntry()">Добавить</button>
-        <div id="mood-entries"></div>
+        <!-- Контент Трекера настроения -->
     </div>
     <script src="script.js"></script>
 </body>
