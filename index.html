@@ -27,3 +27,30 @@
     <script src="script.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трекер настроения</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Трекер настроения</h1>
+    </header>
+    <div class="mood-form">
+        <label><input type="radio" name="mood" value="Ужасно"> Ужасно</label>
+        <label><input type="radio" name="mood" value="Плохо"> Плохо</label>
+        <label><input type="radio" name="mood" value="Нормально"> Нормально</label>
+        <label><input type="radio" name="mood" value="Хорошо"> Хорошо</label>
+        <label><input type="radio" name="mood" value="Отлично"> Отлично</label>
+        <textarea id="mood-comment" placeholder="Комментарий"></textarea>
+        <button onclick="addMoodEntry()">Отправить</button>
+    </div>
+    <div id="mood-entries">
+        <h2>История настроений</h2>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
