@@ -1,60 +1,48 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
-}
-
-header {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-}
-
-main {
-    margin-top: 20px;
-}
-
-section {
-    margin-bottom: 20px;
-}
-
-input[type="number"], input[type="text"], textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    box-sizing: border-box;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-.progress-bar-container {
-    margin-top: 10px;
-}
-
-.progress-bar {
-    width: 100%;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    margin-top: 5px;
-}
-
-.progress {
-    height: 20px;
-    background-color: #007BFF;
-    width: 0%;
-    color: white;
-    text-align: center;
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Трекер</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Мой Трекер</h1>
+    </header>
+    <main>
+        <section id="finance">
+            <h2>Финансовый трекер</h2>
+            <div class="progress-bar-container">
+                <div>Шкала желаний:</div>
+                <div class="progress-bar" id="wish-progress"><div class="progress"></div></div>
+                <div>Шкала накоплений:</div>
+                <div class="progress-bar" id="savings-progress"><div class="progress"></div></div>
+            </div>
+            <input type="number" id="amount-input" placeholder="Введите сумму...">
+            <button onclick="updateSavings()">Добавить сумму</button>
+        </section>
+        <section id="wishlist">
+            <h2>Список желаний</h2>
+            <input type="text" id="wish-title" placeholder="Название">
+            <textarea id="wish-description" placeholder="Описание"></textarea>
+            <input type="number" id="wish-amount" placeholder="Сумма">
+            <input type="text" id="wish-link" placeholder="Ссылка">
+            <button onclick="addWish()">Добавить желание</button>
+            <div id="wish-list"></div>
+        </section>
+        <section id="mood">
+            <h2>Трекер настроения</h2>
+            <label><input type="radio" name="mood" value="Ужасно"> Ужасно</label>
+            <label><input type="radio" name="mood" value="Плохо"> Плохо</label>
+            <label><input type="radio" name="mood" value="Нормально"> Нормально</label>
+            <label><input type="radio" name="mood" value="Хорошо"> Хорошо</label>
+            <label><input type="radio" name="mood" value="Отлично"> Отлично</label>
+            <textarea id="mood-comment" placeholder="Комментарий"></textarea>
+            <button onclick="addMoodEntry()">Добавить</button>
+            <div id="mood-entries"></div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
