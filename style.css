@@ -19,6 +19,10 @@ body {
   cursor: pointer;
 }
 
+.tabs li.active {
+  background-color: #5fa9a3;
+}
+
 .tabs li:hover {
   background-color: #5fa9a3;
 }
