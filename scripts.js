@@ -1,3 +1,14 @@
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        if (section.id === sectionId) {
+            section.classList.add('active');
+        } else {
+            section.classList.remove('active');
+        }
+    });
+}
+
 let totalWishesAmount = 0; // Общая сумма желаний
 let totalSavings = 0; // Текущие накопления
 
@@ -9,7 +20,7 @@ function updateSavings() {
 }
 
 function updateProgressBars() {
-    const wishProgress = (totalSavings / totalWishesAmount) * 100;
+    const wishProgress = totalWishesAmount ? (totalSavings / totalWishesAmount) * 100 : 0;
     document.getElementById('wish-progress').children[0].style.width = `${wishProgress}%`;
     document.getElementById('savings-progress').children[0].style.width = `${(totalSavings / totalWishesAmount) * 100}%`;
 }
@@ -44,3 +55,6 @@ function addMoodEntry() {
     document.getElementById('mood-entries').innerHTML += entry;
     document.getElementById('mood-comment').value = ''; // Очистка поля
 }
+
+// Show the first section initially
+showSection('finance');
