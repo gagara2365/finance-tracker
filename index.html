@@ -18,29 +18,29 @@
     <div class="container">
         <section id="tasks" class="tab-content active">
             <h2>Финансовый Трекер</h2>
-            <div id="finance-progress-container">
-                <progress id="finance-progress" value="0" max="100"></progress>
+            <div class="progress">
+                <div class="progress-bar" id="current-progress" style="width: 0%">0%</div>
             </div>
-            <div id="finance-list"></div>
+            <div class="progress">
+                <div class="progress-bar" id="goal-progress" style="width: 0%">0%</div>
+            </div>
         </section>
         <section id="wishlist" class="tab-content">
             <h2>Желаемое</h2>
-            <input id="wish-name" type="text" placeholder="Название желания">
-            <input id="wish-desc" type="text" placeholder="Описание">
-            <input id="wish-link" type="text" placeholder="Ссылка">
-            <input id="wish-amount" type="number" placeholder="Сумма">
-            <button id="add-wish-btn">Добавить в список</button>
-            <div id="wishlist-items"></div>
+            <input type="text" id="wish-name" placeholder="Название">
+            <textarea id="wish-desc" placeholder="Описание"></textarea>
+            <input type="text" id="wish-link" placeholder="Ссылка">
+            <input type="number" id="wish-amount" placeholder="Сумма"> <!-- Добавляем поле для суммы -->
+            <button id="add-wish-btn">Добавить</button>
         </section>
         <section id="mood" class="tab-content">
             <h2>Трекер Настроения</h2>
-            <input type="radio" id="happy" name="mood" value="Счастлив">
-            <label for="happy">Счастлив</label>
-            <input type="radio" id="sad" name="mood" value="Грустный">
-            <label for="sad">Грустный</label>
-            <textarea id="mood-comment" placeholder="Комментарий..."></textarea>
-            <button id="add-mood-btn">Добавить запись</button>
-            <div id="mood-entries"></div>
+            <input type="radio" name="mood" value="Отличное"> Отличное
+            <input type="radio" name="mood" value="Хорошее"> Хорошее
+            <input type="radio" name="mood" value="Нормальное"> Нормальное
+            <input type="radio" name="mood" value="Плохое"> Плохое
+            <textarea id="mood-comment" placeholder="Комментарий"></textarea>
+            <button id="add-mood-btn">Добавить</button>
         </section>
     </div>
     <script src="scripts.js"></script>
