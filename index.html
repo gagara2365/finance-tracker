@@ -28,9 +28,14 @@
     <h3>Внести сумму:</h3>
     <input type="number" id="input-amount" placeholder="Введите сумму">
     <button onclick="updateSavings()">Добавить</button>
+
+    <h3>Изъять сумму:</h3>
+    <input type="number" id="withdraw-amount" placeholder="Введите сумму">
+    <button onclick="withdrawSavings()">Изъять</button>
+
+    <h3>История транзакций:</h3>
+    <ul id="transaction-history"></ul>
   </div>
-  <h2>Список Желаний</h2>
-  <div id="wish-list"></div>
 </div>
 
 <!-- Страница 2: Лист Желаний -->
@@ -41,8 +46,23 @@
     <input type="text" id="wish-description" placeholder="Описание" required>
     <input type="number" id="wish-price" placeholder="Сумма" required>
     <input type="url" id="wish-link" placeholder="Ссылка" required>
+    <select id="wish-priority" required>
+      <option value="Важно">Важно</option>
+      <option value="Обычно">Обычно</option>
+      <option value="По возможности">По возможности</option>
+    </select>
     <button type="submit">Добавить</button>
   </form>
+
+  <h3>Фильтры по важности:</h3>
+  <select id="filter-priority" onchange="filterWishes()">
+    <option value="Все">Все</option>
+    <option value="Важно">Важно</option>
+    <option value="Обычно">Обычно</option>
+    <option value="По возможности">По возможности</option>
+  </select>
+
+  <div id="wish-list"></div>
 </div>
 
 <!-- Страница 3: Настроение -->
