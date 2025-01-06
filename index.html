@@ -10,13 +10,13 @@
 
 <!-- Навигация -->
 <ul class="tabs">
-  <li onclick="showTab('finance')">Финансы</li>
-  <li onclick="showTab('wishlist')">Лист Желаний</li>
-  <li onclick="showTab('mood')">Настроение</li>
+  <li data-tab="finance">Финансы</li>
+  <li data-tab="wishlist">Лист Желаний</li>
+  <li data-tab="mood">Настроение</li>
 </ul>
 
 <!-- Страница 1: Финансы -->
-<div id="finance" class="tab-content">
+<div id="finance" class="tab-content active">
   <h1>Финансы</h1>
   <div>
     <h3>Общая сумма из списка желаний:</h3>
@@ -34,7 +34,7 @@
 </div>
 
 <!-- Страница 2: Лист Желаний -->
-<div id="wishlist" class="tab-content" style="display: none;">
+<div id="wishlist" class="tab-content">
   <h1>Лист Желаний</h1>
   <form onsubmit="addWish(event)">
     <input type="text" id="wish-name" placeholder="Название" required>
@@ -46,7 +46,7 @@
 </div>
 
 <!-- Страница 3: Настроение -->
-<div id="mood" class="tab-content" style="display: none;">
+<div id="mood" class="tab-content">
   <h1>Настроение</h1>
   <select id="mood-select">
     <option value="Ужасно">Ужасно</option>
