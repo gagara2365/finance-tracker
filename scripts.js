@@ -1,82 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const pages = document.querySelectorAll('.tab-content');
-    const navLinks = document.querySelectorAll('nav a');
-    const taskList = document.getElementById('task-list');
-    const totalTasks = () => Array.from(document.querySelectorAll('.task')).reduce((sum, task) => sum + parseFloat(task.textContent.split(' — ')[1]), 0);
-    const goalAmount = 100000; // Предположим, что это ваша целевая сумма
+let totalWishesAmount = 0; // Общая сумма желаний
+let totalSavings = 0; // Текущие накопления
 
-    const showPage = (pageId) => {
-        pages.forEach(page => {
-            if (page.id === pageId) {
-                page.classList.remove('hidden');
-            } else {
-                page.classList.add('hidden');
-            }
-        });
-    };
+function updateSavings() {
+    const inputAmount = parseFloat(document.getElementById('amount-input').value);
+    totalSavings += inputAmount;
+    document.getElementById('amount-input').value = ''; // Очистить поле ввода
+    updateProgressBars();
+}
 
-    const updateProgressBars = () => {
-        const currentProgress = (totalTasks() / goalAmount) * 100;
-        const goalProgress = ((goalAmount - totalTasks()) / goalAmount) * 100;
-        document.getElementById('current-progress').style.width = `${currentProgress}%`;
-        document.getElementById('current-progress').textContent = `${currentProgress.toFixed(1)}%`;
-        document.getElementById('goal-progress').style.width = `${goalProgress}%`;
-        document.getElementById('goal-progress').textContent = `${goalProgress.toFixed(1)}%`;
-    };
+function updateProgressBars() {
+    const wishProgress = (totalSavings / totalWishesAmount) * 100;
+    document.getElementById('wish-progress').children[0].style.width = `${wishProgress}%`;
+    document.getElementById('savings-progress').children[0].style.width = `${(totalSavings / totalWishesAmount) * 100}%`;
+}
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const pageId = e.target.dataset.tab;
-            showPage(pageId);
-            if (pageId === 'tasks') {
-                updateProgressBars();
-            }
-        });
-    });
+function addWish() {
+    const title = document.getElementById('wish-title').value;
+    const description = document.getElementById('wish-description').value;
+    const amount = parseFloat(document.getElementById('wish-amount').value);
+    const link = document.getElementById('wish-link').value;
 
-    const addWish = () => {
-        const name = document.getElementById('wish-name').value.trim();
-        const desc = document.getElementById('wish-desc').value.trim();
-        const link = document.getElementById('wish-link').value.trim();
-        const amount = parseFloat(document.getElementById('wish-amount').value) || 0;
-        if (name && desc && link) {
-            const wish = document.createElement('div');
-            wish.className = 'wishlist-item';
-            wish.dataset.amount = amount;
-            wish.innerHTML = `
-                <h4>${name}</h4>
-                <p>${desc}</p>
-                <a href="${link}" target="_blank">Посмотреть</a>
-                <p>Сумма: ${amount} ₽</p>
-            `;
-            document.getElementById('wishlist-items').appendChild(wish);
-            // Переносим данные в список задач на странице Финансы
-            const task = document.createElement('div');
-            task.className = 'task';
-            task.innerHTML = `<p>${name} — ${amount} ₽</p>`;
-            taskList.appendChild(task);
-            updateProgressBars(); // Обновляем прогресс
-        }
-    };
-    document.getElementById('add-wish-btn').addEventListener('click', addWish);
+    const wishList = document.getElementById('wish-list');
+    const wishEntry = `<div class="wish-item">
+        <h4>${title}</h4>
+        <p>${description}</p>
+        <a href="${link}" target="_blank">Посмотреть</a>
+        <span>Сумма: ${amount} ₽</span>
+    </div>`;
+    wishList.innerHTML += wishEntry;
 
-    const addMoodEntry = () => {
-        const moodValue = document.querySelector('input[name="mood"]:checked')?.value;
-        const comment = document.getElementById('mood-comment').value.trim();
-        const dateTime = new Date().toLocaleString(); // Фиксируем дату и время
-        if (moodValue) {
-            const moodEntry = document.createElement('div');
-            moodEntry.className = 'mood-entry';
-            moodEntry.innerHTML = `
-                <p>Настроение: ${moodValue}</p>
-                <p>${comment}</p>
-                <small>${dateTime}</small>
-            `;
-            document.getElementById('mood-entries').appendChild(moodEntry);
-        }
-    };
-    document.getElementById('add-mood-btn').addEventListener('click', addMoodEntry);
+    totalWishesAmount += amount;
+    updateProgressBars(); // Обновление шкал прогресса
+}
 
-    showPage('tasks'); // Показываем финансы по умолчанию
-});
+function addMoodEntry() {
+    const selectedMood = document.querySelector('input[name="mood"]:checked').value;
+    const comment = document.getElementById('mood-comment').value;
+    const dateTime = new Date().toLocaleString();
+    const entry = `<div class="mood-entry">
+        <p>Настроение: ${selectedMood} - ${comment}</p>
+        <small>${dateTime}</small>
+    </div>`;
+    document.getElementById('mood-entries').innerHTML += entry;
+    document.getElementById('mood-comment').value = ''; // Очистка поля
+}
