@@ -16,10 +16,18 @@ nav button {
     padding: 10px;
     margin-right: 5px;
     cursor: pointer;
+    background-color: #ddd;
+    border: none;
+    outline: none;
+}
+
+nav button:hover {
+    background-color: #ccc;
 }
 
 .section {
     display: none;
+    margin-top: 20px;
 }
 
 .active {
