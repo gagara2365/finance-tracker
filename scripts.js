@@ -1,54 +1,62 @@
-document.querySelectorAll('.tab-link').forEach(link => {
-    link.addEventListener('click', event => {
-        event.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('nav a');
+    const showPage = (pageId) => {
+        pages.forEach(page => page.classList.toggle('hidden', page.id !== pageId));
+    };
 
-        // Удалить активный класс со всех вкладок и секций
-        document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(section => section.classList.remove('active'));
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = e.target.dataset.page;
+            showPage(pageId);
+        });
+    });
 
-        // Добавить активный класс к текущей вкладке и соответствующей секции
-        const tabId = link.getAttribute('data-tab');
-        link.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
+    const wishlist = document.getElementById('wishlist-items');
+    const financeSection = document.getElementById('tasks');
+
+    document.getElementById('add-wish-btn').addEventListener('click', () => {
+        const name = document.getElementById('wish-name').value.trim();
+        const desc = document.getElementById('wish-desc').value.trim();
+        const link = document.getElementById('wish-link').value.trim();
+        const amount = parseFloat(document.getElementById('wish-amount').value);
+        if (name && desc && link && !isNaN(amount)) {
+            const wish = document.createElement('div');
+            wish.className = 'wishlist-item';
+            wish.innerHTML = `
+                <h4>${name} - ${amount} руб</h4>
+                <p>${desc}</p>
+                <a href="${link}" target="_blank">Посмотреть</a>
+            `;
+            wishlist.appendChild(wish);
+            updateFinanceTracker(name, amount);
+        }
+    });
+
+    function updateFinanceTracker(itemName, itemAmount) {
+        financeSection.innerHTML += `<p>${itemName}: ${itemAmount} руб</p>`;
+        updateFinanceProgress();
+    }
+
+    function updateFinanceProgress() {
+        const totalNeeded = [...document.querySelectorAll('.wishlist-item')].reduce((acc, item) => acc + parseFloat(item.querySelector('h4').textContent.split('-')[1]), 0);
+        const totalCollected = [...document.querySelectorAll('.wishlist-item')].reduce((acc, item) => acc + parseFloat(item.querySelector('h4').textContent.split('-')[1]), 0);
+        const progressPercent = (totalCollected / totalNeeded) * 100;
+        document.getElementById('finance-progress').value = progressPercent;
+        document.getElementById('total-collected').textContent = totalCollected;
+    }
+
+    document.getElementById('add-mood-btn').addEventListener('click', () => {
+        const moodValue = document.querySelector('input[name="mood"]:checked')?.value;
+        const comment = document.getElementById('mood-comment').value.trim();
+        const dateTime = new Date().toLocaleString();
+        const moodEntry = document.createElement('div');
+        moodEntry.className = 'mood-entry';
+        moodEntry.innerHTML = `
+            <p>Настроение: ${moodValue} | ${dateTime}</p>
+            <p>${comment}</p>
+        `;
+        moodEntries.appendChild(moodEntry);
     });
 });
-
-// Финансовый трекер
-let totalBalance = 0;
-function updateBalance() {
-    const change = parseFloat(document.getElementById("balance-change").value) || 0;
-    totalBalance += change;
-    document.getElementById("total-balance").textContent = totalBalance;
-}
-function addTask() {
-    const taskName = document.getElementById("task-name").value;
-    const taskAmount = parseFloat(document.getElementById("task-amount").value) || 0;
-    if (!taskName || taskAmount <= 0) return;
-    const taskList = document.getElementById("task-list");
-    taskList.innerHTML += `<div class="task"><p>${taskName} — ${taskAmount} ₽</p></div>`;
-}
-
-// Желания
-function addWish() {
-    const wishName = document.getElementById("wish-name").value;
-    const wishDesc = document.getElementById("wish-desc").value;
-    const wishLink = document.getElementById("wish-link").value;
-    if (!wishName) return;
-    const wishList = document.getElementById("wishlist-items");
-    wishList.innerHTML += `<div class="wishlist-item">
-        <p><strong>${wishName}</strong> — ${wishDesc}</p>
-        <a href="${wishLink}" target="_blank">Ссылка</a>
-    </div>`;
-}
-
-// Настроение
-function addMoodEntry() {
-    const moodValue = document.querySelector('input[name="mood"]:checked')?.value || '';
-    const moodComment = document.getElementById("mood-comment").value;
-    const moodEntries = document.getElementById("mood-entries");
-    if (!moodValue) return;
-    moodEntries.innerHTML += `<div class="mood-entry">
-        <p>Настроение: ${moodValue}</p>
-        <p>${moodComment}</p>
-    </div>`;
-}
