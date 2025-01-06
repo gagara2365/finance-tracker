@@ -11,17 +11,17 @@
         <h1>Мой Трекер</h1>
     </header>
     <nav>
-        <button onclick="showSection('finance')">Финансовый трекер</button>
-        <button onclick="showSection('wishlist')">Список желаний</button>
-        <button onclick="showSection('mood')">Трекер настроения</button>
+        <button data-section="finance">Финансовый трекер</button>
+        <button data-section="wishlist">Список желаний</button>
+        <button data-section="mood">Трекер настроения</button>
     </nav>
     <div id="finance" class="section">
         <h2>Финансовый трекер</h2>
         <div class="progress-bar-container">
             <div>Шкала желаний:</div>
-            <div class="progress-bar" id="wish-progress"><div class="progress"></div></div>
+            <div class="progress-bar"><div class="progress"></div></div>
             <div>Шкала накоплений:</div>
-            <div class="progress-bar" id="savings-progress"><div class="progress"></div></div>
+            <div class="progress-bar"><div class="progress"></div></div>
         </div>
         <input type="number" id="amount-input" placeholder="Введите сумму...">
         <button onclick="updateSavings()">Добавить сумму</button>
