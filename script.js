@@ -1,17 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    function showSection(sectionId) {
-        const sections = document.querySelectorAll('.section');
-        sections.forEach(section => {
-            if (section.id === sectionId) {
-                section.classList.add('active');
-                section.classList.remove('hidden');
-            } else {
-                section.classList.remove('active');
-                section.classList.add('hidden');
-            }
-        });
-    }
+    const moodEntriesDiv = document.getElementById('mood-entries');
 
-    // Инициализация первого раздела
-    showSection('finance');
+    window.addMoodEntry = function() {
+        const selectedMood = document.querySelector('input[name="mood"]:checked').value;
+        const comment = document.getElementById('mood-comment').value;
+        const entryDiv = document.createElement('div');
+        entryDiv.className = 'mood-entry';
+        const date = new Date().toLocaleString();
+        entryDiv.innerHTML = `<p>Настроение: ${selectedMood} - ${comment} <br><small>${date}</small></p>`;
+        
+        moodEntriesDiv.appendChild(entryDiv);
+
+        // Очистка формы после отправки
+        document.getElementById('mood-comment').value = '';
+        document.querySelector('input[name="mood"]:checked').checked = false;
+    }
 });
