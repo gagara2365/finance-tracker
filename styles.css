@@ -27,28 +27,8 @@ nav button:hover {
 
 .section {
     display: none;
-    margin-top: 20px;
 }
 
 .active {
     display: block;
-}
-
-.progress-bar-container {
-    margin-top: 10px;
-}
-
-.progress-bar {
-    width: 100%;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    margin-top: 5px;
-}
-
-.progress {
-    height: 20px;
-    background-color: #007BFF;
-    width: 0%;
-    color: white;
-    text-align: center;
 }
