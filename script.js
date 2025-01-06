@@ -80,6 +80,27 @@ function updateUI() {
   const progress = totalWishSum === 0 ? 0 : Math.min((savedAmount / totalWishSum) * 100, 100);
   document.getElementById('total-progress').style.width = progress + '%';
 
+  // Обновляем историю транзакций
+  const transactionHistoryList = document.getElementById('transaction-history');
+  transactionHistoryList.innerHTML = '';
+  transactionHistory.forEach(transaction => {
+    const li = document.createElement('li');
+    li.innerText = `${transaction.type}: ${transaction.amount} (${transaction.date})`;
+    transactionHistoryList.appendChild(li);
+  });
+
+  // Обновляем настроения
+  const moodLog = document.getElementById('mood-log');
+  moodLog.innerHTML = '';
+  moodLogData.forEach((log, index) => {
+    const entry = document.createElement('div');
+    entry.innerHTML = `
+      <p>${log.date}: ${log.mood} - ${log.comment}</p>
+      <button onclick="deleteMood(${index})">Удалить</button>
+    `;
+    moodLog.appendChild(entry);
+  });
+
   // Обновляем графики
   updateCharts();
 }
