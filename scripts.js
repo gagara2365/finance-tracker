@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const wishlist = document.getElementById('wishlist-items');
-    const financeSection = document.getElementById('tasks');
-
     document.getElementById('add-wish-btn').addEventListener('click', () => {
         const name = document.getElementById('wish-name').value.trim();
         const desc = document.getElementById('wish-desc').value.trim();
@@ -29,22 +26,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>${desc}</p>
                 <a href="${link}" target="_blank">Посмотреть</a>
             `;
+            const wishlist = document.getElementById('wishlist-items');
             wishlist.appendChild(wish);
             updateFinanceTracker(name, amount);
         }
     });
 
     function updateFinanceTracker(itemName, itemAmount) {
-        financeSection.innerHTML += `<p>${itemName}: ${itemAmount} руб</p>`;
+        const financeList = document.getElementById('finance-list');
+        financeList.innerHTML += `<p>${itemName}: ${itemAmount} руб</p>`;
         updateFinanceProgress();
     }
 
     function updateFinanceProgress() {
         const totalNeeded = [...document.querySelectorAll('.wishlist-item')].reduce((acc, item) => acc + parseFloat(item.querySelector('h4').textContent.split('-')[1]), 0);
-        const totalCollected = [...document.querySelectorAll('.wishlist-item')].reduce((acc, item) => acc + parseFloat(item.querySelector('h4').textContent.split('-')[1]), 0);
-        const progressPercent = (totalCollected / totalNeeded) * 100;
-        document.getElementById('finance-progress').value = progressPercent;
-        document.getElementById('total-collected').textContent = totalCollected;
+        const progressElement = document.getElementById('finance-progress');
+        progressElement.max = totalNeeded;
+        const totalCollected = parseFloat(document.getElementById('total-collected').textContent);
+        progressElement.value = totalCollected;
     }
 
     document.getElementById('add-mood-btn').addEventListener('click', () => {
@@ -57,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Настроение: ${moodValue} | ${dateTime}</p>
             <p>${comment}</p>
         `;
+        const moodEntries = document.getElementById('mood-entries');
         moodEntries.appendChild(moodEntry);
     });
 });
+
