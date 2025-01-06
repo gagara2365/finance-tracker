@@ -1,56 +1,53 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Трекер</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Финансы и Лист Желаний</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Мой Трекер</h1>
-    </header>
-    <nav>
-        <button onclick="showSection('finance')">Финансовый трекер</button>
-        <button onclick="showSection('wishlist')">Список желаний</button>
-        <button onclick="showSection('mood')">Трекер настроения</button>
-    </nav>
-    <div id="finance" class="section">
-        <!-- Контент Финансового трекера -->
-    </div>
-    <div id="wishlist" class="section hidden">
-        <!-- Контент Списка желаний -->
-    </div>
-    <div id="mood" class="section hidden">
-        <!-- Контент Трекера настроения -->
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Трекер настроения</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Трекер настроения</h1>
-    </header>
-    <div class="mood-form">
-        <label><input type="radio" name="mood" value="Ужасно"> Ужасно</label>
-        <label><input type="radio" name="mood" value="Плохо"> Плохо</label>
-        <label><input type="radio" name="mood" value="Нормально"> Нормально</label>
-        <label><input type="radio" name="mood" value="Хорошо"> Хорошо</label>
-        <label><input type="radio" name="mood" value="Отлично"> Отлично</label>
-        <textarea id="mood-comment" placeholder="Комментарий"></textarea>
-        <button onclick="addMoodEntry()">Отправить</button>
-    </div>
-    <div id="mood-entries">
-        <h2>История настроений</h2>
-    </div>
-    <script src="script.js"></script>
+
+<!-- Страница 1: Финансы -->
+<h1>Финансы</h1>
+<div>
+  <h3>Общая сумма из списка желаний:</h3>
+  <div class="progress-bar">
+    <div id="total-progress" class="progress" style="width: 0%;"></div>
+  </div>
+  <p>Накоплено: <span id="saved-amount">0</span> из <span id="wish-total">0</span></p>
+
+  <h3>Внести сумму:</h3>
+  <input type="number" id="input-amount" placeholder="Введите сумму">
+  <button onclick="updateSavings()">Добавить</button>
+</div>
+
+<h2>Список Желаний</h2>
+<div id="wish-list"></div>
+
+<!-- Страница 2: Лист Желаний -->
+<h1>Лист Желаний</h1>
+<form onsubmit="addWish(event)">
+  <input type="text" id="wish-name" placeholder="Название" required>
+  <input type="text" id="wish-description" placeholder="Описание" required>
+  <input type="number" id="wish-price" placeholder="Сумма" required>
+  <input type="url" id="wish-link" placeholder="Ссылка" required>
+  <button type="submit">Добавить</button>
+</form>
+
+<!-- Страница 3: Настроение -->
+<h1>Настроение</h1>
+<select id="mood-select">
+  <option value="Ужасно">Ужасно</option>
+  <option value="Плохо">Плохо</option>
+  <option value="Нормально">Нормально</option>
+  <option value="Хорошо">Хорошо</option>
+  <option value="Отлично">Отлично</option>
+</select>
+<input type="text" id="mood-comment" placeholder="Комментарий">
+<button onclick="addMood()">Добавить</button>
+<div id="mood-log"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
