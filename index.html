@@ -16,68 +16,33 @@
         <a href="#" class="tab-link" data-tab="mood">Настроение</a>
     </nav>
     <div class="container">
-        <!-- Секция Финансы -->
         <section id="tasks" class="tab-content active">
             <h2>Финансовый Трекер</h2>
-            <div class="balance-display">
-                <p>Всего накоплено: <span id="total-balance">0</span> ₽</p>
-                <div class="form-group">
-                    <label for="balance-change">Добавить или убрать средства</label>
-                    <input type="number" id="balance-change" placeholder="Введите сумму (₽)">
-                </div>
-                <button onclick="updateBalance()">Обновить баланс</button>
+            <div id="finance-progress-container">
+                <progress id="finance-progress" value="0" max="100"></progress>
             </div>
-            <div class="form-group">
-                <label for="task-name">Название задачи</label>
-                <input type="text" id="task-name" placeholder="Введите название задачи">
-            </div>
-            <div class="form-group">
-                <label for="task-amount">Необходимая сумма (₽)</label>
-                <input type="number" id="task-amount" placeholder="Введите сумму (₽)">
-            </div>
-            <button onclick="addTask()">Добавить задачу</button>
-            <div id="task-list"></div>
-            <h3>История удаленных задач</h3>
-            <div id="deleted-tasks"></div>
+            <p>Общая сумма: <span id="total-collected">0</span> руб</p>
         </section>
-
-        <!-- Секция Желания -->
         <section id="wishlist" class="tab-content">
             <h2>Желаемое</h2>
-            <div class="form-group">
-                <label for="wish-name">Название</label>
-                <input type="text" id="wish-name" placeholder="Введите название">
-            </div>
-            <div class="form-group">
-                <label for="wish-desc">Описание</label>
-                <textarea id="wish-desc" placeholder="Введите описание"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="wish-link">Ссылка</label>
-                <input type="url" id="wish-link" placeholder="Введите URL">
-            </div>
-            <button onclick="addWish()">Добавить в желаемое</button>
-            <div id="wishlist-items"></div>
+            <input id="wish-name" type="text" placeholder="Название желания">
+            <input id="wish-desc" type="text" placeholder="Описание">
+            <input id="wish-link" type="text" placeholder="Ссылка">
+            <input id="wish-amount" type="number" placeholder="Сумма">
+            <button id="add-wish-btn">Добавить в список</button>
         </section>
-
-        <!-- Секция Настроение -->
         <section id="mood" class="tab-content">
             <h2>Трекер Настроения</h2>
-            <div class="form-group mood-scale">
-                <label><input type="radio" name="mood" value="1"> Ужасно</label>
-                <label><input type="radio" name="mood" value="2"> Плохо</label>
-                <label><input type="radio" name="mood" value="3"> Нормально</label>
-                <label><input type="radio" name="mood" value="4"> Хорошо</label>
-                <label><input type="radio" name="mood" value="5"> Отлично</label>
-            </div>
-            <div class="form-group">
-                <label for="mood-comment">Комментарий</label>
-                <textarea id="mood-comment" placeholder="Добавьте комментарий"></textarea>
-            </div>
-            <button onclick="addMoodEntry()">Сохранить настроение</button>
+            <input type="radio" id="happy" name="mood" value="Счастлив">
+            <label for="happy">Счастлив</label>
+            <input type="radio" id="sad" name="mood" value="Грустный">
+            <label for="sad">Грустный</label>
+            <textarea id="mood-comment" placeholder="Комментарий..."></textarea>
+            <button id="add-mood-btn">Добавить запись</button>
             <div id="mood-entries"></div>
         </section>
     </div>
     <script src="scripts.js"></script>
 </body>
 </html>
+
