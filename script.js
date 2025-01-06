@@ -11,8 +11,14 @@ document.querySelectorAll('.tabs li').forEach(tab => {
       content.classList.remove('active');
     });
 
-    // Показать текущую вкладку
+    // Убираем активный класс с вкладок
+    document.querySelectorAll('.tabs li').forEach(item => {
+      item.classList.remove('active');
+    });
+
+    // Показываем текущую вкладку и делаем вкладку активной
     document.getElementById(activeTab).classList.add('active');
+    tab.classList.add('active');
   });
 });
 
