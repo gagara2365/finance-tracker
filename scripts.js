@@ -9,20 +9,29 @@ function showSection(sectionId) {
     });
 }
 
-let totalWishesAmount = 0; // Общая сумма желаний
-let totalSavings = 0; // Текущие накопления
+let totalWishesAmount = 0;
+let totalSavings = 0;
 
 function updateSavings() {
     const inputAmount = parseFloat(document.getElementById('amount-input').value);
     totalSavings += inputAmount;
-    document.getElementById('amount-input').value = ''; // Очистить поле ввода
+    document.getElementById('amount-input').value = '';
     updateProgressBars();
 }
 
+function animateProgress(element, targetWidth) {
+    const currentWidth = parseFloat(element.style.width) || 0;
+    if (currentWidth < targetWidth) {
+        element.style.width = `${currentWidth + 0.5}%`;
+        requestAnimationFrame(() => animateProgress(element, targetWidth));
+    }
+}
+
 function updateProgressBars() {
-    const wishProgress = totalWishesAmount ? (totalSavings / totalWishesAmount) * 100 : 0;
-    document.getElementById('wish-progress').children[0].style.width = `${wishProgress}%`;
-    document.getElementById('savings-progress').children[0].style.width = `${(totalSavings / totalWishesAmount) * 100}%`;
+    const wishProgressPercent = totalWishesAmount ? (totalSavings / totalWishesAmount) * 100 : 0;
+    const savingsProgressPercent = totalSavings ? (totalSavings / totalWishesAmount) * 100 : 0;
+    animateProgress(document.querySelector('#wish-progress .progress'), wishProgressPercent);
+    animateProgress(document.querySelector('#savings-progress .progress'), savingsProgressPercent);
 }
 
 function addWish() {
@@ -41,7 +50,7 @@ function addWish() {
     wishList.innerHTML += wishEntry;
 
     totalWishesAmount += amount;
-    updateProgressBars(); // Обновление шкал прогресса
+    updateProgressBars();
 }
 
 function addMoodEntry() {
@@ -53,8 +62,9 @@ function addMoodEntry() {
         <small>${dateTime}</small>
     </div>`;
     document.getElementById('mood-entries').innerHTML += entry;
-    document.getElementById('mood-comment').value = ''; // Очистка поля
+    document.getElementById('mood-comment').value = '';
 }
 
-// Show the first section initially
-showSection('finance');
+document.addEventListener('DOMContentLoaded', function() {
+    showSection('finance'); // Initialize the visible section
+});
