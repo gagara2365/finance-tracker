@@ -80,76 +80,69 @@ function updateUI() {
   const progress = totalWishSum === 0 ? 0 : Math.min((savedAmount / totalWishSum) * 100, 100);
   document.getElementById('total-progress').style.width = progress + '%';
 
-  // Обновляем историю транзакций
-  const transactionHistoryList = document.getElementById('transaction-history');
-  transactionHistoryList.innerHTML = '';
-  transactionHistory.forEach(transaction => {
-    const li = document.createElement('li');
-    li.innerText = `${transaction.type}: ${transaction.amount} (${transaction.date})`;
-    transactionHistoryList.appendChild(li);
+  // Обновляем графики
+  updateCharts();
+}
+
+// Построение и обновление графиков
+function updateCharts() {
+  const progressCtx = document.getElementById('progressChart').getContext('2d');
+  const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+
+  if (window.progressChart) window.progressChart.destroy();
+  window.progressChart = new Chart(progressCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Накоплено', 'Осталось'],
+      datasets: [{
+        data: [savedAmount, Math.max(totalWishSum - savedAmount, 0)],
+        backgroundColor: ['#76c7c0', '#e0e0e0'],
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        }
+      }
+    }
   });
 
-  // Обновляем настроения
-  const moodLog = document.getElementById('mood-log');
-  moodLog.innerHTML = '';
-  moodLogData.forEach((log, index) => {
-    const entry = document.createElement('div');
-    entry.innerHTML = `
-      <p>${log.date}: ${log.mood} - ${log.comment}</p>
-      <button onclick="deleteMood(${index})">Удалить</button>
-    `;
-    moodLog.appendChild(entry);
-  });
-}
-
-// Добавить желание
-function addWish(event) {
-  event.preventDefault();
-  const name = document.getElementById('wish-name').value;
-  const description = document.getElementById('wish-description').value;
-  const price = parseFloat(document.getElementById('wish-price').value);
-  const link = document.getElementById('wish-link').value;
-  const priority = document.getElementById('wish-priority').value;
-
-  const newWish = { name, description, price, link, priority };
-  wishListData.push(newWish);
-  totalWishSum += price;
-  saveData();
-  updateUI();
-}
-
-// Удалить желание
-function deleteWish(index) {
-  const wish = wishListData[index];
-  totalWishSum -= wish.price;
-  wishListData.splice(index, 1);
-  saveData();
-  updateUI();
-}
-
-// Фильтрация желаний
-function filterWishes() {
-  const filter = document.getElementById('filter-priority').value;
-  const filteredWishes = filter === 'Все' ? wishListData : wishListData.filter(wish => wish.priority === filter);
-
-  const wishList = document.getElementById('wish-list');
-  wishList.innerHTML = '';
-  filteredWishes.forEach((wish, index) => {
-    const wishItem = document.createElement('div');
-    wishItem.className = 'wish';
-    wishItem.innerHTML = `
-      <h4>${wish.name} (${wish.priority})</h4>
-      <p>${wish.description}</p>
-      <p>Цена: ${wish.price}</p>
-      <a href="${wish.link}" target="_blank">Ссылка</a>
-      <div class="progress-bar">
-        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;"></div>
-      </div>
-      <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
-      <button onclick="markWishAsDone(${index})">Выполнено</button>
-      <button onclick="deleteWish(${index})">Удалить</button>
-    `;
-    wishList.appendChild(wishItem);
+  if (window.distributionChart) window.distributionChart.destroy();
+  window.distributionChart = new Chart(distributionCtx, {
+    type: 'bar',
+    data: {
+      labels: wishListData.map(wish => wish.name),
+      datasets: [{
+        label: 'Накоплено',
+        data: wishListData.map(wish => Math.min(savedAmount, wish.price)),
+        backgroundColor: '#76c7c0',
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Желания'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Сумма'
+          },
+          beginAtZero: true
+        }
+      }
+    }
   });
 }
 
@@ -175,6 +168,15 @@ function withdrawSavings() {
   updateUI();
 }
 
+// Удалить желание
+function deleteWish(index) {
+  const wish = wishListData[index];
+  totalWishSum -= wish.price;
+  wishListData.splice(index, 1);
+  saveData();
+  updateUI();
+}
+
 // Отметить желание как выполненное
 function markWishAsDone(index) {
   const wish = wishListData[index];
@@ -182,6 +184,48 @@ function markWishAsDone(index) {
   totalWishSum -= wish.price;
   wishListData.splice(index, 1);
   transactionHistory.push({ type: 'Выполнено', amount: wish.price, date: new Date().toLocaleString() });
+  saveData();
+  updateUI();
+}
+
+// Фильтры по важности
+function filterWishes() {
+  const filter = document.getElementById('filter-priority').value;
+  const filteredWishes = filter === 'Все' ? wishListData : wishListData.filter(wish => wish.priority === filter);
+
+  const wishList = document.getElementById('wish-list');
+  wishList.innerHTML = '';
+  filteredWishes.forEach((wish, index) => {
+    const wishItem = document.createElement('div');
+    wishItem.className = 'wish';
+    wishItem.innerHTML = `
+      <h4>${wish.name} (${wish.priority})</h4>
+      <p>${wish.description}</p>
+      <p>Цена: ${wish.price}</p>
+      <a href="${wish.link}" target="_blank">Ссылка</a>
+      <div class="progress-bar">
+        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;"></div>
+      </div>
+      <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
+      <button onclick="markWishAsDone(${index})">Выполнено</button>
+      <button onclick="deleteWish(${index})">Удалить</button>
+    `;
+    wishList.appendChild(wishItem);
+  });
+}
+
+// Добавить желание
+function addWish(event) {
+  event.preventDefault();
+  const name = document.getElementById('wish-name').value;
+  const description = document.getElementById('wish-description').value;
+  const price = parseFloat(document.getElementById('wish-price').value);
+  const link = document.getElementById('wish-link').value;
+  const priority = document.getElementById('wish-priority').value;
+
+  const newWish = { name, description, price, link, priority };
+  wishListData.push(newWish);
+  totalWishSum += price;
   saveData();
   updateUI();
 }
