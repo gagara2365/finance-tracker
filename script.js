@@ -8,7 +8,26 @@ let moodLogData = [];
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
   updateUI();
+  setupTabs(); // Настройка переключения вкладок
 });
+
+// Настройка переключения вкладок
+function setupTabs() {
+  const tabs = document.querySelectorAll('.tabs li');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Убираем активность со всех вкладок
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // Активируем текущую вкладку и её содержимое
+      tab.classList.add('active');
+      document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+}
 
 // Сохранение данных в LocalStorage
 function saveData() {
@@ -112,7 +131,7 @@ function deleteWish(index) {
 function filterWishes() {
   const filter = document.getElementById('filter-priority').value;
   const filteredWishes = filter === 'Все' ? wishListData : wishListData.filter(wish => wish.priority === filter);
-  
+
   const wishList = document.getElementById('wish-list');
   wishList.innerHTML = '';
   filteredWishes.forEach((wish, index) => {
