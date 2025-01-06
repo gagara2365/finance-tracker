@@ -3,6 +3,34 @@ body {
   margin: 20px;
 }
 
+.tabs {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabs li {
+  padding: 10px 20px;
+  background-color: #76c7c0;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tabs li:hover {
+  background-color: #5fa9a3;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .progress-bar {
   width: 100%;
   background-color: #e0e0e0;
