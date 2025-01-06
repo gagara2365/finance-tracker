@@ -1,8 +1,8 @@
-let totalWishSum = 0;
-let savedAmount = 0;
-let wishListData = [];
-let transactionHistory = [];
-let moodLogData = [];
+let totalWishSum = 0; // Общая сумма всех желаний
+let savedAmount = 0;  // Общая накопленная сумма
+let wishListData = []; // Список желаний
+let transactionHistory = []; // История транзакций
+let moodLogData = []; // История настроений
 
 // Загрузка данных из LocalStorage при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,9 +65,9 @@ function updateUI() {
       <p>Цена: ${wish.price}</p>
       <a href="${wish.link}" target="_blank">Ссылка</a>
       <div class="progress-bar">
-        <div class="progress" style="width: ${wish.progress}%;" id="progress-${index}"></div>
+        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;" id="progress-${index}"></div>
       </div>
-      <p>Накоплено: ${wish.saved} из ${wish.price}</p>
+      <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
       <button onclick="markWishAsDone(${index})">Выполнено</button>
       <button onclick="deleteWish(${index})">Удалить</button>
     `;
@@ -77,7 +77,7 @@ function updateUI() {
   // Обновляем финансы
   document.getElementById('saved-amount').innerText = savedAmount;
   document.getElementById('wish-total').innerText = totalWishSum;
-  const progress = Math.min((savedAmount / totalWishSum) * 100, 100);
+  const progress = totalWishSum === 0 ? 0 : Math.min((savedAmount / totalWishSum) * 100, 100);
   document.getElementById('total-progress').style.width = progress + '%';
 
   // Обновляем историю транзакций
@@ -111,7 +111,7 @@ function addWish(event) {
   const link = document.getElementById('wish-link').value;
   const priority = document.getElementById('wish-priority').value;
 
-  const newWish = { name, description, price, link, priority, progress: 0, saved: 0 };
+  const newWish = { name, description, price, link, priority };
   wishListData.push(newWish);
   totalWishSum += price;
   saveData();
@@ -121,7 +121,6 @@ function addWish(event) {
 // Удалить желание
 function deleteWish(index) {
   const wish = wishListData[index];
-  savedAmount -= wish.saved; // Уменьшаем накопленную сумму
   totalWishSum -= wish.price;
   wishListData.splice(index, 1);
   saveData();
@@ -144,9 +143,9 @@ function filterWishes() {
       <p>Цена: ${wish.price}</p>
       <a href="${wish.link}" target="_blank">Ссылка</a>
       <div class="progress-bar">
-        <div class="progress" style="width: ${wish.progress}%;" id="progress-${index}"></div>
+        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;"></div>
       </div>
-      <p>Накоплено: ${wish.saved} из ${wish.price}</p>
+      <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
       <button onclick="markWishAsDone(${index})">Выполнено</button>
       <button onclick="deleteWish(${index})">Удалить</button>
     `;
@@ -161,18 +160,6 @@ function updateSavings() {
 
   savedAmount += amount;
   transactionHistory.push({ type: 'Внесено', amount, date: new Date().toLocaleString() });
-
-  // Равномерное распределение суммы по всем пунктам
-  let remainingAmount = amount;
-  wishListData.forEach(wish => {
-    if (remainingAmount > 0 && wish.saved < wish.price) {
-      const amountToAdd = Math.min(remainingAmount, wish.price - wish.saved);
-      wish.saved += amountToAdd;
-      wish.progress = (wish.saved / wish.price) * 100;
-      remainingAmount -= amountToAdd;
-    }
-  });
-
   saveData();
   updateUI();
 }
@@ -191,10 +178,10 @@ function withdrawSavings() {
 // Отметить желание как выполненное
 function markWishAsDone(index) {
   const wish = wishListData[index];
-  savedAmount -= wish.saved;
+  savedAmount -= wish.price;
   totalWishSum -= wish.price;
   wishListData.splice(index, 1);
-  transactionHistory.push({ type: 'Выполнено', amount: wish.saved, date: new Date().toLocaleString() });
+  transactionHistory.push({ type: 'Выполнено', amount: wish.price, date: new Date().toLocaleString() });
   saveData();
   updateUI();
 }
