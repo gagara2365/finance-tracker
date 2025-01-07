@@ -72,3 +72,56 @@ input, select {
   width: 100%;
   box-sizing: border-box;
 }
+/* Стандартные стили для кнопки переключения темы */
+#theme-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  background-color: #76c7c0;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#theme-toggle:hover {
+  background-color: #5fa9a3;
+}
+
+/* Темная тема */
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-theme .tabs li {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+body.dark-theme .tabs li.active {
+  background-color: #555;
+}
+
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme button {
+  background-color: #333;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+body.dark-theme .wish {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+}
+
+body.dark-theme a {
+  color: #76c7c0;
+}
+
+body.dark-theme #theme-toggle {
+  background-color: #444;
+  color: #e0e0e0;
+}
