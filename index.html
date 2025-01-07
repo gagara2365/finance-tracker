@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Финансы и Лист Желаний</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Подключение Chart.js -->
 </head>
 <body>
+
+<!-- Кнопка для переключения темы -->
+<div id="theme-toggle" onclick="toggleTheme()">Тёмная тема</div>
 
 <!-- Навигация -->
 <ul class="tabs">
@@ -21,11 +23,8 @@
   <h1>Финансы</h1>
   <div>
     <h3>Общая сумма из списка желаний:</h3>
-    <div class="progress-bar">
-      <div id="total-progress" class="progress" style="width: 0%;"></div>
-    </div>
     <p>Накоплено: <span id="saved-amount">0</span> из <span id="wish-total">0</span></p>
-    
+
     <h3>Внести сумму:</h3>
     <input type="number" id="input-amount" placeholder="Введите сумму">
     <button onclick="updateSavings()">Добавить</button>
