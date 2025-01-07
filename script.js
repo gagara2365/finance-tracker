@@ -20,9 +20,11 @@ function setupTabs() {
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      // Убираем активные классы у всех вкладок и контента
       tabs.forEach(t => t.classList.remove('active'));
       tabContents.forEach(content => content.classList.remove('active'));
 
+      // Добавляем активный класс к текущей вкладке и соответствующему контенту
       tab.classList.add('active');
       document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
     });
