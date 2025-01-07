@@ -4,6 +4,9 @@ let wishListData = []; // Список желаний
 let transactionHistory = []; // История транзакций
 let moodLogData = []; // История настроений
 
+let progressChart = null; // График прогресса накоплений
+let distributionChart = null; // График распределения накоплений
+
 // Загрузка данных из LocalStorage при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
@@ -110,8 +113,12 @@ function updateCharts() {
   const progressCtx = document.getElementById('progressChart').getContext('2d');
   const distributionCtx = document.getElementById('distributionChart').getContext('2d');
 
-  if (window.progressChart) window.progressChart.destroy();
-  window.progressChart = new Chart(progressCtx, {
+  // Удаляем предыдущий график, если он существует
+  if (progressChart) progressChart.destroy();
+  if (distributionChart) distributionChart.destroy();
+
+  // График прогресса накоплений
+  progressChart = new Chart(progressCtx, {
     type: 'doughnut',
     data: {
       labels: ['Накоплено', 'Осталось'],
@@ -130,8 +137,8 @@ function updateCharts() {
     }
   });
 
-  if (window.distributionChart) window.distributionChart.destroy();
-  window.distributionChart = new Chart(distributionCtx, {
+  // График распределения накоплений
+  distributionChart = new Chart(distributionCtx, {
     type: 'bar',
     data: {
       labels: wishListData.map(wish => wish.name),
@@ -207,32 +214,6 @@ function markWishAsDone(index) {
   transactionHistory.push({ type: 'Выполнено', amount: wish.price, date: new Date().toLocaleString() });
   saveData();
   updateUI();
-}
-
-// Фильтры по важности
-function filterWishes() {
-  const filter = document.getElementById('filter-priority').value;
-  const filteredWishes = filter === 'Все' ? wishListData : wishListData.filter(wish => wish.priority === filter);
-
-  const wishList = document.getElementById('wish-list');
-  wishList.innerHTML = '';
-  filteredWishes.forEach((wish, index) => {
-    const wishItem = document.createElement('div');
-    wishItem.className = 'wish';
-    wishItem.innerHTML = `
-      <h4>${wish.name} (${wish.priority})</h4>
-      <p>${wish.description}</p>
-      <p>Цена: ${wish.price}</p>
-      <a href="${wish.link}" target="_blank">Ссылка</a>
-      <div class="progress-bar">
-        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;"></div>
-      </div>
-      <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
-      <button onclick="markWishAsDone(${index})">Выполнено</button>
-      <button onclick="deleteWish(${index})">Удалить</button>
-    `;
-    wishList.appendChild(wishItem);
-  });
 }
 
 // Добавить желание
