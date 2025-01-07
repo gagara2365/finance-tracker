@@ -114,8 +114,13 @@ function updateCharts() {
   const distributionCtx = document.getElementById('distributionChart').getContext('2d');
 
   // Удаляем предыдущий график, если он существует
-  if (progressChart) progressChart.destroy();
-  if (distributionChart) distributionChart.destroy();
+  if (progressChart && typeof progressChart.destroy === 'function') {
+    progressChart.destroy();
+  }
+
+  if (distributionChart && typeof distributionChart.destroy === 'function') {
+    distributionChart.destroy();
+  }
 
   // График прогресса накоплений
   progressChart = new Chart(progressCtx, {
