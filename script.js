@@ -4,9 +4,6 @@ let wishListData = []; // Список желаний
 let transactionHistory = []; // История транзакций
 let moodLogData = []; // История настроений
 
-let progressChart = null; // График прогресса накоплений
-let distributionChart = null; // График распределения накоплений
-
 // Загрузка данных из LocalStorage при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
@@ -65,12 +62,9 @@ function updateUI() {
     wishItem.innerHTML = `
       <h4>${wish.name} (${wish.priority})</h4>
       <p>${wish.description}</p>
-      <p>Цена: ${wish.price}</p>
-      <a href="${wish.link}" target="_blank">Ссылка</a>
-      <div class="progress-bar">
-        <div class="progress" style="width: ${Math.min((savedAmount / wish.price) * 100, 100)}%;" id="progress-${index}"></div>
-      </div>
+      <p>Требуется: ${wish.price}</p>
       <p>Накоплено: ${Math.min(savedAmount, wish.price)} из ${wish.price}</p>
+      <a href="${wish.link}" target="_blank">Ссылка</a>
       <button onclick="markWishAsDone(${index})">Выполнено</button>
       <button onclick="deleteWish(${index})">Удалить</button>
     `;
@@ -80,8 +74,6 @@ function updateUI() {
   // Обновляем финансы
   document.getElementById('saved-amount').innerText = savedAmount;
   document.getElementById('wish-total').innerText = totalWishSum;
-  const progress = totalWishSum === 0 ? 0 : Math.min((savedAmount / totalWishSum) * 100, 100);
-  document.getElementById('total-progress').style.width = progress + '%';
 
   // Обновляем историю транзакций
   const transactionHistoryList = document.getElementById('transaction-history');
@@ -102,80 +94,6 @@ function updateUI() {
       <button onclick="deleteMood(${index})">Удалить</button>
     `;
     moodLog.appendChild(entry);
-  });
-
-  // Обновляем графики
-  updateCharts();
-}
-
-// Построение и обновление графиков
-function updateCharts() {
-  const progressCtx = document.getElementById('progressChart').getContext('2d');
-  const distributionCtx = document.getElementById('distributionChart').getContext('2d');
-
-  // Удаляем предыдущий график, если он существует
-  if (progressChart && typeof progressChart.destroy === 'function') {
-    progressChart.destroy();
-  }
-
-  if (distributionChart && typeof distributionChart.destroy === 'function') {
-    distributionChart.destroy();
-  }
-
-  // График прогресса накоплений
-  progressChart = new Chart(progressCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Накоплено', 'Осталось'],
-      datasets: [{
-        data: [savedAmount, Math.max(totalWishSum - savedAmount, 0)],
-        backgroundColor: ['#76c7c0', '#e0e0e0'],
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        }
-      }
-    }
-  });
-
-  // График распределения накоплений
-  distributionChart = new Chart(distributionCtx, {
-    type: 'bar',
-    data: {
-      labels: wishListData.map(wish => wish.name),
-      datasets: [{
-        label: 'Накоплено',
-        data: wishListData.map(wish => Math.min(savedAmount, wish.price)),
-        backgroundColor: '#76c7c0',
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Желания'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Сумма'
-          },
-          beginAtZero: true
-        }
-      }
-    }
   });
 }
 
