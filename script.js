@@ -1,6 +1,7 @@
 let totalWishSum = 0; // Общая сумма всех желаний
 let savedAmount = 0;  // Общая накопленная сумма
 let wishListData = []; // Список желаний
+let completedWishes = []; // Архив выполненных желаний
 let transactionHistory = []; // История транзакций
 let moodLogData = []; // История настроений
 
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadData();
   updateUI();
   setupTabs(); // Настройка переключения вкладок
+  loadTheme(); // Загрузка сохранённой темы
 });
 
 // Настройка переключения вкладок
@@ -27,9 +29,36 @@ function setupTabs() {
   });
 }
 
+// Переключение между светлой и тёмной темой
+function toggleTheme() {
+  const body = document.body;
+
+  // Переключаем класс "dark-theme"
+  body.classList.toggle('dark-theme');
+
+  // Сохраняем выбранную тему в LocalStorage
+  const isDark = body.classList.contains('dark-theme');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+  // Обновляем текст кнопки
+  document.getElementById('theme-toggle').innerText = isDark ? 'Светлая тема' : 'Тёмная тема';
+}
+
+// Загрузка сохранённой темы
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    document.getElementById('theme-toggle').innerText = 'Светлая тема';
+  } else {
+    document.getElementById('theme-toggle').innerText = 'Тёмная тема';
+  }
+}
+
 // Сохранение данных в LocalStorage
 function saveData() {
   localStorage.setItem('wishList', JSON.stringify(wishListData));
+  localStorage.setItem('completedWishes', JSON.stringify(completedWishes));
   localStorage.setItem('savedAmount', savedAmount);
   localStorage.setItem('totalWishSum', totalWishSum);
   localStorage.setItem('transactionHistory', JSON.stringify(transactionHistory));
@@ -39,12 +68,14 @@ function saveData() {
 // Загрузка данных из LocalStorage
 function loadData() {
   const savedWishList = localStorage.getItem('wishList');
+  const savedCompletedWishes = localStorage.getItem('completedWishes');
   const savedAmountData = localStorage.getItem('savedAmount');
   const savedTotalSum = localStorage.getItem('totalWishSum');
   const savedTransactions = localStorage.getItem('transactionHistory');
   const savedMoodLog = localStorage.getItem('moodLog');
 
   if (savedWishList) wishListData = JSON.parse(savedWishList);
+  if (savedCompletedWishes) completedWishes = JSON.parse(savedCompletedWishes);
   if (savedAmountData) savedAmount = parseFloat(savedAmountData);
   if (savedTotalSum) totalWishSum = parseFloat(savedTotalSum);
   if (savedTransactions) transactionHistory = JSON.parse(savedTransactions);
@@ -69,6 +100,22 @@ function updateUI() {
       <button onclick="deleteWish(${index})">Удалить</button>
     `;
     wishList.appendChild(wishItem);
+  });
+
+  // Обновляем архив выполненных желаний
+  const archiveList = document.getElementById('completed-wishes');
+  archiveList.innerHTML = '';
+  completedWishes.forEach(wish => {
+    const archiveItem = document.createElement('div');
+    archiveItem.className = 'wish';
+    archiveItem.innerHTML = `
+      <h4>${wish.name} (${wish.priority})</h4>
+      <p>${wish.description}</p>
+      <p>Стоимость: ${wish.price}</p>
+      <p>Дата выполнения: ${wish.completedDate}</p>
+      <a href="${wish.link}" target="_blank">Ссылка</a>
+    `;
+    archiveList.appendChild(archiveItem);
   });
 
   // Обновляем финансы
@@ -133,8 +180,13 @@ function markWishAsDone(index) {
   const wish = wishListData[index];
   savedAmount -= wish.price;
   totalWishSum -= wish.price;
+
+  // Добавляем желание в архив с датой выполнения
+  wish.completedDate = new Date().toLocaleString();
+  completedWishes.push(wish);
+
   wishListData.splice(index, 1);
-  transactionHistory.push({ type: 'Выполнено', amount: wish.price, date: new Date().toLocaleString() });
+  transactionHistory.push({ type: 'Выполнено', amount: wish.price, date: wish.completedDate });
   saveData();
   updateUI();
 }
